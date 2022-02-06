@@ -7,12 +7,12 @@
 #       FSF for GNU Binutils contribution, too.
 # Binutils new CSR template generator
 
-from math import inf
+import math
 import os
 import os.path
 import re
-import sys
 import shutil
+import sys
 
 PAT_CSR_NAME = re.compile('[a-z0-9]+')
 PAT_CSR_CLASS = re.compile('CSR_CLASS_[A-Z0-9_]+')
@@ -35,7 +35,7 @@ PRIV_VERSIONS = {
         '1.10':  (2, 'PRIV_SPEC_CLASS_1P10', '1p10'),
         '1.11':  (3, 'PRIV_SPEC_CLASS_1P11', '1p11'),
         '1.12':  (4, 'PRIV_SPEC_CLASS_1P12', '1p12'),
-        'draft': (inf, 'PRIV_SPEC_CLASS_DRAFT', None),
+        'draft': (math.inf, 'PRIV_SPEC_CLASS_DRAFT', None),
 }
 CSR_VERSION_CONSTANTS_REV = dict((v[1], k) for k, v in PRIV_VERSIONS.items())
 assert(DEFAULT_CSR_MIN_VERSION in PRIV_VERSIONS)

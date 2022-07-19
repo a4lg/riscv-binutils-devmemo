@@ -22,15 +22,54 @@ DATA_DIR = os.path.join(ROOT_DIR, 'out/csr-new')
 if not os.path.isdir(DATA_DIR):
         os.makedirs(DATA_DIR)
 
-DEFAULT_CSR_MIN_VERSION = '1.9.1'
+DEFAULT_CSR_MIN_VERSION = 'none'
 DEFAULT_CSR_CLASS       = 'CSR_CLASS_I'
 
-I_CSR_CLASSES = frozenset([
+CSR_CLASSES_I = frozenset([
         'CSR_CLASS_I',
         'CSR_CLASS_I_32',
 ])
 
+CSR_CLASSES_RV32 = frozenset([
+        'CSR_CLASS_I_32',
+        'CSR_CLASS_H_32',
+        'CSR_CLASS_SMSTATEEN_32',
+        'CSR_CLASS_SMSTATEEN_AND_H_32',
+        'CSR_CLASS_SSCOFPMF_32',
+        'CSR_CLASS_SSTC_32',
+        'CSR_CLASS_SSTC_AND_H_32',
+])
+
+CSR_CLASSES_H = frozenset([
+        # Exclude CSR_CLASS_H*
+        'CSR_CLASS_SMSTATEEN_AND_H',
+        'CSR_CLASS_SMSTATEEN_AND_H_32',
+        'CSR_CLASS_SSTC_AND_H',
+        'CSR_CLASS_SSTC_AND_H_32',
+])
+
+CSR_EXTENSIONS = {
+        'CSR_CLASS_I':    "`i'",
+        'CSR_CLASS_I_32': "`i'",
+        'CSR_CLASS_H':    "`h'",
+        'CSR_CLASS_H_32': "`h'",
+        'CSR_CLASS_F':    "`f'",
+        'CSR_CLASS_ZKR':  "`zkr'",
+        'CSR_CLASS_V':    "`v'",
+        'CSR_CLASS_SMSTATEEN':          "`smstateen'",
+        'CSR_CLASS_SMSTATEEN_AND_H':    "`smstateen'",
+        'CSR_CLASS_SMSTATEEN_32':       "`smstateen'",
+        'CSR_CLASS_SMSTATEEN_AND_H_32': "`smstateen'",
+        'CSR_CLASS_SSCOFPMF':    "`sscofpmf'",
+        'CSR_CLASS_SSCOFPMF_32': "`sscofpmf'",
+        'CSR_CLASS_SSTC':          "`sstc'",
+        'CSR_CLASS_SSTC_AND_H':    "`sstc'",
+        'CSR_CLASS_SSTC_32':       "`sstc'",
+        'CSR_CLASS_SSTC_AND_H_32': "`sstc'",
+}
+
 PRIV_VERSIONS = {
+        'none':  (0, 'PRIV_SPEC_CLASS_NONE', None),
         '1.9.1': (1, 'PRIV_SPEC_CLASS_1P9P1', '1p9p1'),
         '1.10':  (2, 'PRIV_SPEC_CLASS_1P10', '1p10'),
         '1.11':  (3, 'PRIV_SPEC_CLASS_1P11', '1p11'),
@@ -90,7 +129,6 @@ for ln in sys.stdin:
         value  = int(tokens[1], 0)
         minver = tokens[2]
         cclass = tokens[3]
-        is_rv32 = cclass.endswith('_32')  # RV32-only flag is generated from CSR class
         is_rdonly = (value & 0xc00) == 0xc00
         assert(PAT_CSR_NAME.fullmatch(name))
         assert(value >= 0 and value < 0x1000)
@@ -103,7 +141,9 @@ for ln in sys.stdin:
         with open(os.path.join(DATA_DIR, 'riscv-opc.1.h'), 'a') as f:
                 print('#define CSR_{0} 0x{1:x}'.format(name.upper(), value), file=f)
         with open(os.path.join(DATA_DIR, 'riscv-opc.2.h'), 'a') as f:
-                print('DECLARE_CSR({0}, CSR_{1}, {2}, {3}, PRIV_SPEC_CLASS_DRAFT)'.format(name, name.upper(), cclass, PRIV_VERSIONS[minver][1]), file=f)
+                print('DECLARE_CSR({0}, CSR_{1}, {2}, {3}, PRIV_SPEC_CLASS_{4})'.format(
+                        name, name.upper(), cclass, PRIV_VERSIONS[minver][1],
+                        'NONE' if nver == 0 else 'DRAFT'), file=f)
         with open(os.path.join(DATA_DIR, 'csr-dw-regnums.s'), 'a') as f:
                 print('\t.cfi_offset {0}, {1:d}'.format(name, value*4), file=f)
         with open(os.path.join(DATA_DIR, 'csr-dw-regnums.d'), 'a') as f:
@@ -119,10 +159,12 @@ for ln in sys.stdin:
                                 name if nver_k >= nver else '0x{:x}'.format(value)), file=f)
                 with open(os.path.join(DATA_DIR, 'csr-version-{}.l'.format(vprefix)), 'a') as f:
                         for i in range(2):
-                                if cclass not in I_CSR_CLASSES or is_rv32:
-                                        # csr-version-*.l is stderr output tested with RV64I_Zicsr.
-                                        # That means, non-I CSRs and RV32 CSRs generate this warning.
-                                        print('.*Warning: invalid CSR `{0}\' for the current ISA'.format(name), file=f)
+                                if cclass in CSR_CLASSES_RV32:
+                                        print('.*Warning: invalid CSR `{0}\', needs rv32i extension'.format(name), file=f)
+                                if cclass in CSR_CLASSES_H:
+                                        print('.*Warning: invalid CSR `{0}\', needs `h\' extension'.format(name), file=f)
+                                if cclass not in CSR_CLASSES_I:
+                                        print('.*Warning: invalid CSR `{0}\', needs {1} extension'.format(name, CSR_EXTENSIONS[cclass]), file=f)
                                 if nver_k < nver:
                                         print('.*Warning: invalid CSR `{0}\' for the privileged spec `{1}\''.format(name, k), file=f)
                         if is_rdonly:

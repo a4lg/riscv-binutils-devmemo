@@ -1,5 +1,5 @@
 !!!!!
-stimecmp	0x14d 1.11 CSR_CLASS_SSTC
-stimecmph	0x15d 1.11 CSR_CLASS_SSTC_32
-vstimecmp	0x24d 1.12 CSR_CLASS_SSTC
-vstimecmph	0x25d 1.12 CSR_CLASS_SSTC_32
+stimecmp	0x14d none CSR_CLASS_SSTC
+stimecmph	0x15d none CSR_CLASS_SSTC_32
+vstimecmp	0x24d none CSR_CLASS_SSTC_AND_H
+vstimecmph	0x25d none CSR_CLASS_SSTC_AND_H_32

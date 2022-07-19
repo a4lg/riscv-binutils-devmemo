@@ -6,6 +6,8 @@
 #       for GNU Binutils contribution if you assigned the copyright to
 #       FSF for GNU Binutils contribution, too.
 # Binutils new CSR template generator
+# Usage (example):
+#       cat examples/csr-new/smstateen.txt | ./csr-new.py
 
 import math
 import os

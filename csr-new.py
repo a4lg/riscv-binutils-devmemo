@@ -156,9 +156,8 @@ for ln in sys.stdin:
 		if vprefix is None:
 			continue
 		with open(os.path.join(DATA_DIR, 'csr-version-{}.d'.format(vprefix)), 'a') as f:
-			print(('[ \t]+[0-9a-f]+:[ \t]+{0:03x}02573[ \t]+csrr[ \t]+a0,{1}\n' +
-				'[ \t]+[0-9a-f]+:[ \t]+{0:03x}59073[ \t]+csrw[ \t]+{1},a1').format(value,
-				name if nver_k >= nver else '0x{:x}'.format(value)), file=f)
+			print(('[ \t]+[0-9a-f]+:[ \t]+{0:03x}02573[ \t]+csrr[ \t]+a0,{1}\n[ \t]+[0-9a-f]+:[ \t]+{0:03x}59073[ \t]+csrw[ \t]+{1},a1').format(
+				value, (name if nver_k >= nver else '0x{:x}'.format(value))), file=f)
 		with open(os.path.join(DATA_DIR, 'csr-version-{}.l'.format(vprefix)), 'a') as f:
 			for i in range(2):
 				if cclass in CSR_CLASSES_RV32:

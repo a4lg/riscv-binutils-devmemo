@@ -48,6 +48,7 @@ CSR_CLASSES_H = frozenset([
 	'CSR_CLASS_SMSTATEEN_AND_H_32',
 	'CSR_CLASS_SSTC_AND_H',
 	'CSR_CLASS_SSTC_AND_H_32',
+	'CSR_CLASS_ZJPM_AND_H',
 ])
 
 CSR_EXTENSIONS = {
@@ -68,6 +69,8 @@ CSR_EXTENSIONS = {
 	'CSR_CLASS_SSTC_AND_H':    "`sstc'",
 	'CSR_CLASS_SSTC_32':       "`sstc'",
 	'CSR_CLASS_SSTC_AND_H_32': "`sstc'",
+	'CSR_CLASS_ZJPM':       "`zjpm'",
+	'CSR_CLASS_ZJPM_AND_H': "`zjpm'",
 }
 
 PRIV_VERSIONS = {

@@ -22,7 +22,7 @@ PAT_CSR_CLASS = re.compile('CSR_CLASS_[A-Z0-9_]+')
 ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
 DATA_DIR = os.path.join(ROOT_DIR, 'out/csr-new')
 if not os.path.isdir(DATA_DIR):
-        os.makedirs(DATA_DIR)
+	os.makedirs(DATA_DIR)
 
 DEFAULT_CSR_MIN_VERSION = 'none'
 DEFAULT_CSR_CLASS       = 'CSR_CLASS_I'

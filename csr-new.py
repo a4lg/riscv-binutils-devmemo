@@ -71,6 +71,7 @@ CSR_EXTENSIONS = {
 	'CSR_CLASS_SSTC_AND_H_32': "`sstc'",
 	'CSR_CLASS_ZJPM':       "`zjpm'",
 	'CSR_CLASS_ZJPM_AND_H': "`zjpm'",
+	'CSR_CLASS_SMCLIC': "`smclic'",
 }
 
 PRIV_VERSIONS = {

@@ -166,11 +166,16 @@ for ln in sys.stdin:
 			for i in range(2):
 				if cclass in CSR_CLASSES_RV32:
 					print('.*Warning: invalid CSR `{0}\', needs rv32i extension'.format(name), file=f)
+					print('.*Info: macro .*', file=f)
 				if cclass in CSR_CLASSES_H:
 					print('.*Warning: invalid CSR `{0}\', needs `h\' extension'.format(name), file=f)
+					print('.*Info: macro .*', file=f)
 				if cclass not in CSR_CLASSES_I:
 					print('.*Warning: invalid CSR `{0}\', needs {1} extension'.format(name, CSR_EXTENSIONS[cclass]), file=f)
+					print('.*Info: macro .*', file=f)
 				if nver_k < nver:
 					print('.*Warning: invalid CSR `{0}\' for the privileged spec `{1}\''.format(name, k), file=f)
+					print('.*Info: macro .*', file=f)
 			if is_rdonly:
 				print('.*Warning: read-only CSR is written `csrw {},a1\''.format(name), file=f)
+				print('.*Info: macro .*', file=f)

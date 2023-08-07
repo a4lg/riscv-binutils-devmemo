@@ -1,0 +1,7 @@
+miselect   0x350 none CSR_CLASS_SMAIA_OR_SMCSRIND
+mireg      0x351 none CSR_CLASS_SMAIA_OR_SMCSRIND
+mireg2     0x352 none CSR_CLASS_SMCSRIND
+mireg3     0x353 none CSR_CLASS_SMCSRIND
+mireg4     0x355 none CSR_CLASS_SMCSRIND
+mireg5     0x356 none CSR_CLASS_SMCSRIND
+mireg6     0x357 none CSR_CLASS_SMCSRIND
